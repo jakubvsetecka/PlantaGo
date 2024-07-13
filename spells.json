@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Fireball",
+        "area": 5,
+        "color": "red",
+        "damage": 10,
+        "velocity": 7,
+        "heal": 0
+    },
+    {
+        "name": "Healing Wind",
+        "area": 3,
+        "color": "green",
+        "damage": 0,
+        "velocity": 5,
+        "heal": 10
+    }
+]
