@@ -1,55 +1,54 @@
-try:
-    from transformers import pipeline
-    from scs.incremental_parse import IncrementalParser, SpecialToken, ParseFailure
-    from tensorflow import keras
-    print("All imports successful")
-except ImportError as e:
-    print(f"Import error: {e}")
+from guidance import models, gen, system, user, assistant, guidance, select
+from guidance import *
 
+# Define the guidance model using a local LLM (e.g., LLaMA)
+# You'll need to have the model weights downloaded and the appropriate library installed
+llama3 = models.LlamaCpp("/mnt/d/programovani/MOJE/models/Meta-Llama-3-8B.Q3_K_S.gguf")
+print("Model loaded\n")
 
-schema = """
-{
-    output: string,
-    array_output: []number,
-    optional_output?: number,
-    nested_schema: []{
-        inner_output: string
-    }
-}
-"""
+@guidance
+def spell_generator(lm, plant1, plant2):
+    with system():
+        lm += f"""
+        You are a magical botanist who creates spells by combining plants.
+        Create a spell by combining the properties of {plant1} and {plant2}.
+        The spell must follow this structure:
+        - Type: Either Fire or Water
+        - If Fire:
+          - Damage: An integer
+          - Reach: An integer
+          - Rate of Fire: An integer
+          - Fire Damage: An integer
+        - If Water:
+          - Healing: An integer
+          - Reach: An integer
+          - Rate of Fire: An integer
+        """
 
-# Load the gpt2 model
-pipe = pipeline('text-generation', model='gpt2')
+    with user():
+        lm += f"Create a spell combining {plant1} and {plant2}."
 
-# Generate output
-output = pipe('Input')
+    with assistant():
+        lm += "Here's the spell structure:\n\n"
 
-# Example of how to manually enforce JSON schema (simplified)
-import jsonschema
+        lm += "Type: "
+        lm += select(["Fire", "Water"], name='answer')
+        lm += "\n"
 
-schema_dict = {
-    "type": "object",
-    "properties": {
-        "output": {"type": "string"},
-        "array_output": {"type": "array", "items": {"type": "number"}},
-        "optional_output": {"type": "number"},
-        "nested_schema": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "inner_output": {"type": "string"}
-                },
-                "required": ["inner_output"]
-            }
-        }
-    },
-    "required": ["output", "array_output", "nested_schema"]
-}
+        if lm['answer'] == "Fire":
+            lm += 'Damage: ' + f"{gen(name='damage', regex=r'[0-9]+')}"
+            lm += 'Reach: ' + f"{gen(name='reach', regex=r'[0-9]+')}"
+            lm += 'Rate of Fire: ' + f"{gen(name='rate_of_fire', regex=r'[0-9]+')}"
+            lm += 'Fire Damage: ' + f"{gen(name='fire_damage', regex=r'[0-9]+')}"
+        else:  # Water
+            lm += 'Healing: ' + f"{gen(name='healing', regex=r'[0-9]+')}"
+            lm += 'Reach: + ' + f"{gen(name='reach', regex=r'[0-9]+')}"
+            lm += 'Rate of Fire: ' + f"{gen(name='rate_of_fire', regex=r'[0-9]+')}"
 
-# Validate the output
-try:
-    jsonschema.validate(instance=output, schema=schema_dict)
-    print("Output is valid")
-except jsonschema.exceptions.ValidationError as e:
-    print(f"Output is invalid: {e.message}")
+    return lm
+
+# Example usage
+plant1 = "Sunflower"
+plant2 = "Aloe Vera"
+lm = llama3 + spell_generator(plant1, plant2)
+print(str(lm))

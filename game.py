@@ -24,10 +24,10 @@ player_speed = 5
 
 # Spell class
 class Spell:
-    def __init__(self, name, color, area, damage, velocity, heal):
+    def __init__(self, name, color, area_of_effect, damage, velocity, heal):
         self.name = name
         self.color = color
-        self.area = area
+        self.area_of_effect = area_of_effect
         self.damage = damage
         self.velocity = velocity
         self.heal = heal
@@ -39,11 +39,11 @@ class Spell:
         self.pos[1] += self.direction[1] * self.velocity
 
     def draw(self, surface):
-        pygame.draw.circle(surface, self.color, self.pos, self.area)
+        pygame.draw.circle(surface, self.color, self.pos, self.area_of_effect)
 
 # Function to cast a spell
 def cast_spell(spell_data, direction):
-    spell = Spell(spell_data['name'], spell_data['color'], spell_data['area'], spell_data['damage'], spell_data['velocity'], spell_data['heal'])
+    spell = Spell(spell_data['name'], spell_data['color'], spell_data['area_of_effect'], spell_data['damage'], spell_data['velocity'], spell_data['heal'])
     spell.direction = direction
     return spell
 

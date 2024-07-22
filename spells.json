@@ -1,7 +1,24 @@
 [
+    {"name":"Runes and Abilities For Spells","damage":357055,"color":"FFFFFF","velocity":4.16,"area_of_effect":2900,"heal":90.780000199999999998714670000001},
+    {
+        "color": "purple",
+        "name": "Spell",
+        "damage": 0.0,
+        "velocity": 0.6,
+        "area_of_effect": 20,
+        "heal": 15
+    },
+    {
+        "damage": 3,
+        "area_of_effect": 1,
+        "name": "Damage Effectiveness Low",
+        "color": "red",
+        "velocity": 0.8,
+        "heal": 90
+    },
     {
         "name": "Fireball",
-        "area": 5,
+        "area_of_effect": 5,
         "color": "red",
         "damage": 10,
         "velocity": 7,
@@ -9,7 +26,7 @@
     },
     {
         "name": "Healing Wind",
-        "area": 3,
+        "area_of_effect": 3,
         "color": "green",
         "damage": 0,
         "velocity": 5,
