@@ -1,0 +1,40 @@
+settings =
+{
+    orientation =
+    {
+        default = "portrait",
+        supported = { "portrait" },
+    },
+
+    android =
+    {
+        usesPermissions =
+        {
+            "android.permission.INTERNET",
+        },
+        -- Remove the applicationChildElements section
+    },
+
+    iphone =
+    {
+        plist =
+        {
+            UIStatusBarHidden = false,
+            UILaunchStoryboardName = "LaunchScreen",
+            ITSAppUsesNonExemptEncryption = false,
+        },
+    },
+
+    plugins =
+    {
+        -- Add any plugins you're using here
+    },
+
+    window =
+    {
+        titleText =
+        {
+            default = "Snake Game",
+        },
+    },
+}
