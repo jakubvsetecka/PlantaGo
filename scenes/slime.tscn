@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://bo6gax3h61wof"]
+
+[ext_resource type="Script" path="res://scripts/slime.gd" id="1_gcki1"]
+[ext_resource type="Texture2D" uid="uid://dvkmp72q7o3cv" path="res://assets/Characters/Monsters/Slimes/Slime.png" id="1_xagmd"]
+[ext_resource type="PackedScene" uid="uid://b3hjtqwolwr3c" path="res://scenes/killzone.tscn" id="2_pk0t5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmaw4"]
+atlas = ExtResource("1_xagmd")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sma11"]
+atlas = ExtResource("1_xagmd")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tg587"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gmaw4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sma11")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kpero"]
+size = Vector2(6, 5)
+
+[node name="Slime" type="Node2D"]
+script = ExtResource("1_gcki1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_tg587")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.82439
+
+[node name="Killzone" parent="." instance=ExtResource("2_pk0t5")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_kpero")

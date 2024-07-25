@@ -1,14 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://vm0q8lib1glw"]
+[gd_scene load_steps=4 format=3 uid="uid://vm0q8lib1glw"]
 
 [ext_resource type="PackedScene" uid="uid://cenvgebji177" path="res://scenes/map.tscn" id="1_46720"]
 [ext_resource type="PackedScene" uid="uid://bda15ph1otsf7" path="res://scenes/player.tscn" id="1_as713"]
+[ext_resource type="PackedScene" uid="uid://bo6gax3h61wof" path="res://scenes/slime.tscn" id="3_bntjd"]
 
 [node name="Game" type="Node2D"]
 
 [node name="TileMap" parent="." instance=ExtResource("1_46720")]
 
 [node name="Player" parent="." instance=ExtResource("1_as713")]
+unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(4, 4)
 position_smoothing_enabled = true
+
+[node name="Slime" parent="." instance=ExtResource("3_bntjd")]
+position = Vector2(-41, -15)
