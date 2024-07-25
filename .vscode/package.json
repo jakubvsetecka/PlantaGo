@@ -1,0 +1,10 @@
+{
+    "name": "plantago-godot",
+    "version": "1.0.0",
+    "description": "Plantago Godot project",
+    "scripts": {
+      "pair-device": "adb pair",
+      "connect-device": "adb connect",
+      "send-apk": "adb install Plantago.apk"
+    }
+  }

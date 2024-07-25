@@ -1,0 +1,65 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Open Godot Editor",
+            "type": "process",
+            "command": "c:\\Users\\User\\AppData\\Godot\\Godot_v4.2.2-stable_win64.exe",
+            "args": [
+                "--path",
+                "${workspaceFolder}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Pair with Device",
+            "type": "shell",
+            "command": "C:\\Users\\User\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+            "args": [
+                "pair",
+                "${input:deviceIP}:${input:pairingPort}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Connect to Device",
+            "type": "shell",
+            "command": "C:\\Users\\User\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+            "args": [
+                "connect",
+                "${input:deviceIP}:${input:connectPort}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Send APK",
+            "type": "shell",
+            "command": "C:\\Users\\User\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+            "args": [
+                "install",
+                "${workspaceFolder}\\Plantago.apk"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "deviceIP",
+            "type": "promptString",
+            "description": "Enter the IP address of your Android device",
+            "default": "192.168.1.100"
+        },
+        {
+            "id": "pairingPort",
+            "type": "promptString",
+            "description": "Enter the pairing port (usually 37000)",
+            "default": "37000"
+        },
+        {
+            "id": "connectPort",
+            "type": "promptString",
+            "description": "Enter the connect port (usually 5555)",
+            "default": "5555"
+        }
+    ]
+}
