@@ -1,0 +1,9 @@
+res://scenes/game.tscn
+res://scenes/map.tscn
+res://scenes/player.tscn
+res://scripts/Killzone.gd
+res://scenes/spell.tscn
+res://scenes/killzone.tscn
+res://scenes/slime.tscn
+res://scripts/killzone.gd
+res://scripts/slime.gd
