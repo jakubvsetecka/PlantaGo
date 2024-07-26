@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bo6gax3h61wof"]
+[gd_scene load_steps=9 format=3 uid="uid://bo6gax3h61wof"]
 
 [ext_resource type="Script" path="res://scripts/slime.gd" id="1_gcki1"]
 [ext_resource type="Texture2D" uid="uid://dvkmp72q7o3cv" path="res://assets/Characters/Monsters/Slimes/Slime.png" id="1_xagmd"]
@@ -26,10 +26,13 @@ animations = [{
 "speed": 2.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ts3cc"]
+size = Vector2(6, 6)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kpero"]
 size = Vector2(6, 5)
 
-[node name="Slime" type="Node2D"]
+[node name="Slime" type="CharacterBody2D"]
 script = ExtResource("1_gcki1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -37,6 +40,10 @@ sprite_frames = SubResource("SpriteFrames_tg587")
 animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.82439
+
+[node name="SlimeShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_ts3cc")
 
 [node name="Killzone" parent="." instance=ExtResource("2_pk0t5")]
 

@@ -50,9 +50,9 @@ func _on_timer_timeout():
 	# Remove this line if you don't want to reload the scene after casting
 	# get_tree().reload_current_scene()
 
-func animate_sprite(orientation, is_running):
+func animate_sprite(ori, is_running):
 	if is_running:
-		match orientation:
+		match ori:
 			Orientation.LEFT:
 				animated_sprite.play("run_left")
 			Orientation.RIGHT:
@@ -62,7 +62,7 @@ func animate_sprite(orientation, is_running):
 			Orientation.DOWN:
 				animated_sprite.play("run_down")
 	else:
-		match orientation:
+		match ori:
 			Orientation.LEFT:
 				animated_sprite.play("face_left")
 			Orientation.RIGHT:
@@ -74,7 +74,6 @@ func animate_sprite(orientation, is_running):
 
 func _input(event):
 	if event.is_action_pressed("cast"):
-		print("Input received")
 		cast_spell()
 
 func _physics_process(delta):
