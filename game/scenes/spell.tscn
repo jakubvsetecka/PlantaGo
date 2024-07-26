@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dj2pln2xfp4jw"]
+[gd_scene load_steps=7 format=3 uid="uid://dj2pln2xfp4jw"]
 
 [ext_resource type="Script" path="res://scripts/spell.gd" id="1_vqowk"]
 [ext_resource type="Texture2D" uid="uid://dipf2cr37oa85" path="res://assets/Objects/FireballProjectile.png" id="1_yjg5b"]
-[ext_resource type="PackedScene" uid="uid://b3hjtqwolwr3c" path="res://scenes/killzone.tscn" id="2_ncccl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_npbhd"]
 atlas = ExtResource("1_yjg5b")
@@ -26,7 +25,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_rkdiw"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_at3r4"]
 radius = 3.0
 
 [node name="Spell" type="Node2D"]
@@ -40,10 +39,9 @@ sprite_frames = SubResource("SpriteFrames_7jmqp")
 frame_progress = 0.309962
 
 [node name="Area2D" type="Area2D" parent="."]
-
-[node name="Killzone" parent="." instance=ExtResource("2_ncccl")]
 collision_layer = 4
-collision_mask = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
-shape = SubResource("CircleShape2D_rkdiw")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_at3r4")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
