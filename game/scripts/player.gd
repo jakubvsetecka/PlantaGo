@@ -79,8 +79,7 @@ func _input(event):
 func _physics_process(delta):
 
 	# Get Input
-	direction.x = Input.get_axis("move_left", "move_right")
-	direction.y = Input.get_axis("move_up", "move_down")
+	direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 
 	# Normalize the direction to prevent faster diagonal movement
 	direction = direction.normalized()
@@ -111,3 +110,7 @@ func _physics_process(delta):
 func _on_animated_sprite_2d_animation_finished():
 	if animated_sprite.animation == "cast":
 		casting = false # Replace with function body.
+		
+
+func _on_virtual_joystick_second_touch_pressed():
+	cast_spell()
