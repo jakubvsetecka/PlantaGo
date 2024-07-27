@@ -3,7 +3,7 @@ extends Node2D
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var camera = $Player/Camera2D
 
-var direction = Vector2.ZERO
+var direction : Vector2 = Vector2.ZERO
 var SPEED = 45
 
 func _ready():
@@ -38,6 +38,7 @@ func _physics_process(delta):
 	if direction == Vector2(0,0):
 		pass
 	position += direction * SPEED * delta
+	rotation = direction.angle() - PI/2
 	
 	# Check if spell is outside viewport
 	if is_outside_viewport():

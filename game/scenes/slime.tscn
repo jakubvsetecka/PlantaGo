@@ -30,7 +30,7 @@ animations = [{
 size = Vector2(6, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kpero"]
-size = Vector2(6, 5)
+size = Vector2(8, 6)
 
 [node name="Slime" type="CharacterBody2D"]
 script = ExtResource("1_gcki1")
@@ -48,5 +48,5 @@ shape = SubResource("RectangleShape2D_ts3cc")
 [node name="Killzone" parent="." instance=ExtResource("2_pk0t5")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
-position = Vector2(0, 1.5)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_kpero")

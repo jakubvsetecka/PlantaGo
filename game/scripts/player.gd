@@ -46,7 +46,6 @@ func animate_sprite(is_casting, is_running):
 	
 	# Handle Casting
 	if is_casting:
-		print("Character is casting")
 		return
 		
 	# Handle idle character
