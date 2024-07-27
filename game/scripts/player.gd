@@ -1,22 +1,23 @@
 extends CharacterBody2D
 
-enum Orientation {
-	LEFT = 0,
-	RIGHT = 1,
-	UP = 2,
-	DOWN = 3
-}
-
 const SPEED = 5000.0
+const pi_4 = PI / 4
+const pi_2 = PI / 2
 
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var timer = $Timer
 @onready var game = $".."
+@onready var joystick = %"Virtual Joystick"
 const SPELL = preload ("res://scenes/spell.tscn")
 
 var direction = Vector2.ZERO
 var casting = false
-var orientation = Orientation.DOWN
+var player_rotation = PI/2
+var orientation = Vector2(0,1)
+
+func _ready():
+	animated_sprite.play("face_down")
+	velocity = Vector2(0, 0)
 
 func get_direction():
 	print("direction is: " + direction)
@@ -29,19 +30,8 @@ func cast_spell():
 		timer.start()
 
 		var spell = SPELL.instantiate()
-		match orientation:
-			Orientation.LEFT:
-				spell.rotation_degrees = 90
-				spell.direction = Vector2.LEFT
-			Orientation.RIGHT:
-				spell.rotation_degrees = -90
-				spell.direction = Vector2.RIGHT
-			Orientation.UP:
-				spell.rotation_degrees = 180
-				spell.direction = Vector2.UP
-			Orientation.DOWN:
-				spell.rotation_degrees = 0
-				spell.direction = Vector2.DOWN
+		spell.rotation = player_rotation - pi_2
+		spell.direction = orientation
 		spell.position = position
 		game.add_child(spell)
 
@@ -50,28 +40,41 @@ func _on_timer_timeout():
 	# Remove this line if you don't want to reload the scene after casting
 	# get_tree().reload_current_scene()
 
-func animate_sprite(ori, is_running):
-	if is_running:
-		match ori:
-			Orientation.LEFT:
-				animated_sprite.play("run_left")
-			Orientation.RIGHT:
-				animated_sprite.play("run_right")
-			Orientation.UP:
-				animated_sprite.play("run_up")
-			Orientation.DOWN:
-				animated_sprite.play("run_down")
-	else:
-		match ori:
-			Orientation.LEFT:
-				animated_sprite.play("face_left")
-			Orientation.RIGHT:
+func animate_sprite(is_casting, is_running):
+	
+	var animation = animated_sprite.animation
+	
+	# Handle Casting
+	if is_casting:
+		print("Character is casting")
+		return
+		
+	# Handle idle character
+	if not is_running:
+		if "face" in animation:
+			return
+		else:
+			if (player_rotation < pi_4) and (player_rotation > (-pi_4)):
 				animated_sprite.play("face_right")
-			Orientation.UP:
-				animated_sprite.play("face_up")
-			Orientation.DOWN:
+			elif (player_rotation > pi_4) and (player_rotation < (pi_4 * 3)):
 				animated_sprite.play("face_down")
-
+			elif (player_rotation > (-3*pi_4)) and (player_rotation < -pi_4):
+				animated_sprite.play("face_up")
+			else:
+				animated_sprite.play("face_left")
+			return
+	
+	# Handle runninng character
+	if is_running:
+		if (player_rotation < pi_4) and (player_rotation > (-pi_4)):
+			animated_sprite.play("run_right")
+		elif (player_rotation > pi_4) and (player_rotation < (pi_4 * 3)):
+			animated_sprite.play("run_down")
+		elif (player_rotation > (-3*pi_4)) and (player_rotation < -pi_4):
+			animated_sprite.play("run_up")
+		else:
+			animated_sprite.play("run_left")
+			
 func _input(event):
 	if event.is_action_pressed("cast"):
 		cast_spell()
@@ -79,30 +82,29 @@ func _input(event):
 func _physics_process(delta):
 
 	# Get Input
-	direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+	var joystick_direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 
 	# Normalize the direction to prevent faster diagonal movement
+	direction = joystick_direction
 	direction = direction.normalized()
-
+	
+	# Set the orientation
+	if direction != Vector2(0,0):
+		orientation = direction
+	
 	# Set the velocity
 	if direction:
 		velocity = direction * SPEED * delta
 	else:
 		# Stop the character when there's no input
 		velocity = Vector2.ZERO
-
+	
+	# Get the joysticks rotation
+	if joystick and joystick.is_pressed:
+		player_rotation = joystick.output.angle()
+	
 	# Animate the character
-	if velocity.y > 0:
-		orientation = Orientation.DOWN
-	elif velocity.y < 0:
-		orientation = Orientation.UP
-	elif velocity.x > 0:
-		orientation = Orientation.RIGHT
-	elif velocity.x < 0:
-		orientation = Orientation.LEFT
-
-	if not casting:
-		animate_sprite(orientation, velocity != Vector2(0, 0))
+	animate_sprite(casting, velocity != Vector2(0,0))
 
 	# Move the character
 	move_and_slide()

@@ -23,11 +23,13 @@ position = Vector2(-41, -15)
 layer = 128
 
 [node name="Virtual Joystick" parent="UI" instance=ExtResource("3_g3sbk")]
+unique_name_in_owner = true
 offset_left = 5.0
 offset_top = -929.0
 offset_right = 536.0
 offset_bottom = -3.0
 joystick_mode = 1
+visibility_mode = 2
 
 [node name="Base" parent="UI/Virtual Joystick" index="0"]
 offset_left = -275.767
