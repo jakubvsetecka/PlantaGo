@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnavu3di87vg5"]
+
+[ext_resource type="Script" path="res://scripts/spell_effect_object.gd" id="1_w2ri3"]
+
+[node name="SpellEffectObject" type="Node2D"]
+script = ExtResource("1_w2ri3")
+effect_type = "damage"
+collision_mask = 3
