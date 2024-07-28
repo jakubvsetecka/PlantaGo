@@ -1,6 +1,16 @@
+class_name Player
 extends CharacterBody2D
 
-const SPEED = 5000.0
+# Player Attribute
+var max_health : int = 100
+var health : int = max_health
+var damage : int = 10 # Collision damage
+@export var knockback_force: float = 50.0
+@export var knockback_duration: float = 0.2
+var knockback_velocity: Vector2 = Vector2.ZERO
+var knockback_timer: float = 0.0
+
+const SPEED = 2000.0
 const pi_4 = PI / 4
 const pi_2 = PI / 2
 
@@ -10,6 +20,9 @@ const pi_2 = PI / 2
 @onready var joystick = %"Virtual Joystick"
 const SPELL = preload ("res://scenes/spell.tscn")
 
+@export var max_collisions := 6
+var collision_count := 0
+
 var direction = Vector2.ZERO
 var casting = false
 var player_rotation = PI/2
@@ -17,7 +30,16 @@ var orientation = Vector2(0,1)
 
 func _ready():
 	animated_sprite.play("face_down")
-	velocity = Vector2(0, 0)
+
+func get_health():
+	return health  # Assuming 'health' is a property of the character
+
+func get_max_health():
+	return max_health  # Assuming 'max_health' is a property of the character
+
+func kill():
+	print("You died")
+	get_tree().reload_current_scene()
 
 func get_direction():
 	print("direction is: " + direction)
@@ -79,34 +101,63 @@ func _input(event):
 		cast_spell()
 
 func _physics_process(delta):
-
-	# Get Input
-	var joystick_direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
-
-	# Normalize the direction to prevent faster diagonal movement
-	direction = joystick_direction
-	direction = direction.normalized()
+	# Handle collisions
+	collision_count = 0
+	var collision = move_and_collide(velocity * delta)
 	
-	# Set the orientation
-	if direction != Vector2(0,0):
-		orientation = direction
-	
-	# Set the velocity
-	if direction:
-		velocity = direction * SPEED * delta
+	while (collision and collision_count < max_collisions):
+		var collider = collision.get_collider()
+		
+		if collider is Slime:
+			collider.hit(damage, position)
+			break
+		else:
+			collision_count += 1
+
+	# Handle knockback
+	if knockback_timer > 0:
+		knockback_timer -= delta
+		velocity = knockback_velocity
+		move_and_slide()
 	else:
-		# Stop the character when there's no input
-		velocity = Vector2.ZERO
-	
-	# Get the joysticks rotation
-	if joystick and joystick.is_pressed:
-		player_rotation = joystick.output.angle()
-	
-	# Animate the character
-	animate_sprite(casting, velocity != Vector2(0,0))
+		# Get Input
+		var joystick_direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 
-	# Move the character
-	move_and_slide()
+		# Normalize the direction to prevent faster diagonal movement
+		direction = joystick_direction
+		direction = direction.normalized()
+		
+		# Set the orientation
+		if direction != Vector2(0,0):
+			orientation = direction
+		
+		# Set the velocity
+		if direction:
+			velocity = direction * SPEED * delta
+		else:
+			# Stop the character when there's no input
+			velocity = Vector2.ZERO
+		
+		# Get the joysticks rotation
+		if joystick and joystick.is_pressed:
+			player_rotation = joystick.output.angle()
+		
+		# Animate the character
+		animate_sprite(casting, velocity != Vector2(0,0))
+
+		# Move the character
+		move_and_slide()
+
+func hit(value: int, attacker_position: Vector2):
+	health -= value
+	print("Ow! New health: ", health)
+	
+	# Calculate knockback direction
+	var knockback_direction = (global_position - attacker_position).normalized()
+	
+	# Apply knockback
+	knockback_velocity = knockback_direction * knockback_force
+	knockback_timer = knockback_duration
 
 func _on_animated_sprite_2d_animation_finished():
 	if animated_sprite.animation == "cast":

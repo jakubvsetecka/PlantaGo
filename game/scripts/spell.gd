@@ -4,6 +4,7 @@ extends Node2D
 @onready var camera = $Player/Camera2D
 
 var direction : Vector2 = Vector2.ZERO
+var damage : int = 10
 var SPEED = 45
 
 func _ready():
@@ -52,8 +53,8 @@ func _physics_process(delta):
 func _on_area_2d_body_entered(body):
 	print("Collided with: ", body.name)
 	
-	# Destroy the thing it collided with
-	body.queue_free()
+	# Hit
+	body.hit(damage, position)
 	
 	# Destroy spell after collision
 	queue_free()
