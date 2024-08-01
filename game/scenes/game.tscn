@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://vm0q8lib1glw"]
+[gd_scene load_steps=9 format=3 uid="uid://vm0q8lib1glw"]
 
 [ext_resource type="PackedScene" uid="uid://cenvgebji177" path="res://scenes/map.tscn" id="1_46720"]
 [ext_resource type="PackedScene" uid="uid://bda15ph1otsf7" path="res://scenes/player.tscn" id="1_as713"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="3_g3sbk"]
 [ext_resource type="PackedScene" uid="uid://b3hjtqwolwr3c" path="res://scenes/killzone.tscn" id="5_wjxhx"]
 [ext_resource type="PackedScene" uid="uid://dnavu3di87vg5" path="res://scenes/spell_effect_object.tscn" id="6_d5sah"]
+[ext_resource type="PackedScene" uid="uid://braxa4xh0p4ow" path="res://scenes/enemy_spawner.tscn" id="7_3isjb"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jnfi0"]
 normal = Vector2(0, 1)
@@ -62,10 +63,17 @@ offset_bottom = 457.372
 position = Vector2(-1, -139)
 shape = SubResource("WorldBoundaryShape2D_jnfi0")
 
+[node name="EnemySpawner" parent="." instance=ExtResource("7_3isjb")]
+position = Vector2(0, -33)
+Slime = ExtResource("3_bntjd")
+spawn_radius = 200.0
+min_spawn_distance = 100.0
+max_enemies = 100
+spawn_interval = 0.1
+
 [node name="SpellEffectObject" parent="." instance=ExtResource("6_d5sah")]
-position = Vector2(-56, 31)
-size = Vector2(20, 20)
-ttl = 10.0
+position = Vector2(-68, 53)
+size = Vector2(50, 100)
 
 [connection signal="second_touch_pressed" from="UI/Virtual Joystick" to="Player" method="_on_virtual_joystick_second_touch_pressed"]
 

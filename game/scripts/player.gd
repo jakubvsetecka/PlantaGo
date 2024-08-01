@@ -30,6 +30,7 @@ var orientation = Vector2(0,1)
 
 func _ready():
 	animated_sprite.play("face_down")
+	add_to_group("player")
 
 func get_health():
 	return health  # Assuming 'health' is a property of the character
@@ -48,17 +49,40 @@ func get_direction():
 func cast_spell():
 	if not casting:
 		casting = true
-		animated_sprite.play("cast")
 		timer.start()
-
+		
+		var nearest_enemy = find_nearest_enemy()
 		var spell = SPELL.instantiate()
-		spell.rotation = player_rotation - pi_2
-		spell.direction = orientation
+		
+		if nearest_enemy:
+			# Calculate direction to the nearest enemy
+			var direction_to_enemy = (nearest_enemy.global_position - global_position).normalized()
+			spell.rotation = direction_to_enemy.angle()
+			spell.direction = direction_to_enemy
+		else:
+			# If no enemy found, use default direction
+			spell.rotation = player_rotation - PI/2
+			spell.direction = orientation
+		
 		spell.position = position
 		game.add_child(spell)
 
+func find_nearest_enemy():
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var nearest = null
+	var nearest_distance = INF
+	
+	for enemy in enemies:
+		var distance = global_position.distance_to(enemy.global_position)
+		if distance < nearest_distance:
+			nearest = enemy
+			nearest_distance = distance
+	
+	return nearest
+
 func _on_timer_timeout():
 	casting = false
+	cast_spell()
 	# Remove this line if you don't want to reload the scene after casting
 	# get_tree().reload_current_scene()
 
@@ -66,10 +90,6 @@ func animate_sprite(is_casting, is_running):
 	
 	var animation = animated_sprite.animation
 	
-	# Handle Casting
-	if is_casting:
-		return
-		
 	# Handle idle character
 	if not is_running:
 		if "face" in animation:
@@ -98,10 +118,12 @@ func animate_sprite(is_casting, is_running):
 			
 func _input(event):
 	if event.is_action_pressed("cast"):
-		cast_spell()
+		pass
+		#cast_spell()
 
 func _physics_process(delta):
 	# Handle collisions
+	cast_spell()
 	collision_count = 0
 	var collision = move_and_collide(velocity * delta)
 	

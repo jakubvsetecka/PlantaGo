@@ -1,7 +1,7 @@
 class_name Slime
 extends CharacterBody2D
 
-@onready var player = %Player
+var player: Node2D  # Changed from @onready to a regular variable
 
 # Slime atributes
 @export var speed = 1000  # Increased speed for better movement
@@ -18,12 +18,16 @@ var knockback_timer: float = 0.0
 var collision_count := 0
 
 func _ready():
-	if not player:
-		print("Player not found. Check the node path.")
 	velocity = Vector2.ZERO
+	add_to_group("enemies")
+	player = %Player
+
+func set_player(new_player: Node2D):
+	player = new_player
 
 func _physics_process(delta):
-	# Handle collisions
+	
+	# Handle Collisions
 	collision_count = 0
 	var collision = move_and_collide(velocity * delta)
 	
@@ -36,25 +40,22 @@ func _physics_process(delta):
 		else:
 			collision_count += 1
 	
-	# Hnadle knockback
+	# Handle knockback
 	if knockback_timer > 0:
 		knockback_timer -= delta
 		velocity = knockback_velocity
 		move_and_slide()
+	elif player:  # Check if player is set
+		# Get direction to player
+		var direction = (player.global_position - global_position).normalized()
+		
+		# Set velocity
+		velocity = direction * speed * delta
+		
+		# Move and slide
+		move_and_slide()
 	else:
-		if player:
-			# Get direction to player
-			var direction = (player.global_position - global_position).normalized()
-			
-			# Set velocity
-			velocity = direction * speed * delta
-			
-			# Handle collisions
-			
-			# Move and slide
-			move_and_slide()
-		else:
-			print("Player not found")
+		print("Player not set for this Slime")
 		
 func hit(value: int, attacker_position: Vector2):
 	health -= value
@@ -68,6 +69,7 @@ func hit(value: int, attacker_position: Vector2):
 	knockback_timer = knockback_duration
 	
 func kill():
+	emit_signal("tree_exiting")
 	queue_free()
 	
 func get_health():
