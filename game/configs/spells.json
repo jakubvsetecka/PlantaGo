@@ -1,0 +1,83 @@
+{
+ 	"spells": [
+	{
+		"name": "Fireball",
+		"color_scheme": "#ff0000",
+		"frequency": 0.5,
+		"spell_chain": [
+		{
+			"type": "projectile",
+			"velocity": 200,
+			"shape": {
+				"type": "donut",
+				"inner_radius": 10,
+				"outer_radius": 20,
+				"angle": 360,
+				"rotation": 0
+			},
+			"effect": {
+				"type": "one_time",
+				"effect_type": "alter_health",
+				"value": -15
+			}
+		},
+		{
+			"type": "area",
+			"ttl": 5,
+			"shape": {
+				"type": "rect",
+				"inner_width": 10,
+				"outer_width": 10,
+				"length": 10,
+				"rotation": 0
+			},
+			"position": {
+				"initial": "on_parent",
+				"type": "static"
+			},
+			"effect": {
+				"type": "over_time",
+				"time": 5,
+				"tick_per_sec": 2,
+				"effect_type": "alter_health",
+				"value": -1
+			}
+		},
+		{
+			"type": "alter",
+			"target": "parent",
+			"effect": {
+				"type": "over_time",
+				"time": 5,
+				"tick_per_sec": 0.001,
+				"effect_type": "alter_speed",
+				"value": -1
+			}
+		}
+		]
+	},
+	{
+		"name": "Ice Cycle",
+		"color_scheme": "#ff0000",
+		"frequency": 1,
+		"spell_chain": [
+		{
+			"type": "projectile",
+			"velocity": 200,
+			"shape": {
+				"type": "donut",
+				"inner_radius": 10,
+				"outer_radius": 20,
+				"angle": 360,
+				"rotation": 0
+			},
+			"effect": {
+				"type": "one_time",
+				"effect_type": "alter_health",
+				"value": -5
+			}
+		}
+		]
+	}
+	]
+}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://umwom6wlta28"]
+
+[ext_resource type="Script" path="res://scripts/alter_module.gd" id="1_5oo5k"]
+
+[node name="AlterModule" type="Node2D"]
+script = ExtResource("1_5oo5k")

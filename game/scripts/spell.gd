@@ -1,61 +1,57 @@
 extends Node2D
 
-@onready var animated_sprite = $AnimatedSprite2D
-@onready var camera = $Player/Camera2D
+@export var spell_data: Dictionary
 
-var direction : Vector2 = Vector2.ZERO
-var damage : int = 10
-var SPEED = 45
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+var spell_chain: SpellModule
 
 func _ready():
-	load_config()
+	initialize_spell(spell_data)
 
-func load_config():
-	var config_file = FileAccess.open("res://configs/spell_config.json", FileAccess.READ)
-	if config_file:
-		var json_string = config_file.get_as_text()
-		config_file.close()
-		var json = JSON.parse_string(json_string)
-		if json:
-			SPEED = json.get("speed", SPEED)  # Use default if not found in JSON
-		else:
-			print("Failed to parse spell_config.json")
-	else:
-		print("Failed to open spell_config.json")
+func initialize_spell(data: Dictionary):
+	# Initialize spell properties
+	$NameLabel.text = data.get("name", "Unknown Spell")
+	sprite.modulate = Color(data.get("color_scheme", "#ffffff"))
+	spell_chain = create_spell_chain(data.get("spell_chain", []))
 
-func get_camera_viewport_rect() -> Rect2:
-	camera = get_node("/root/Game/Player/Camera2D")
-	var screen_center = camera.get_screen_center_position()
-	var viewport_size = get_viewport_rect().size
-	var top_left = screen_center - viewport_size / 2
-	return Rect2(top_left, viewport_size)
+func create_spell_chain(chain_data: Array) -> SpellModule:
+	var first_module = null
+	var current_module = null
 
-func is_outside_viewport() -> bool:
-	var camera_rect = get_camera_viewport_rect()
-	return not camera_rect.has_point(global_position)
+	for module_data in chain_data:
+		var new_module = create_spell_module(module_data)
+		if new_module:
+			add_child(new_module)
+			if not first_module:
+				first_module = new_module
+			if current_module:
+				current_module.next_module = new_module
+			current_module = new_module
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	if direction == Vector2(0,0):
-		pass
-	position += direction * SPEED * delta
-	rotation = direction.angle() - PI/2
+	return first_module
+
+func create_spell_module(module_data: Dictionary) -> SpellModule:
+	var module_type = module_data.get("type", "")
+	var module_scene: PackedScene
 	
-	# Check if spell is outside viewport
-	if is_outside_viewport():
-		print("Spell outside vieport")
-		queue_free()
-	
-	# Play animation
-	animated_sprite.play("default")
+	match module_type:
+		"projectile":
+			module_scene = preload("res://scenes/ProjectileModule.tscn")
+		"area":
+			module_scene = preload("res://scenes/AreaModule.tscn")
+		"alter":
+			module_scene = preload("res://scenes/AlterModule.tscn")
+		_:
+			return null
 
+	var module_instance = module_scene.instantiate()
+	module_instance.initialize(module_data)
+	return module_instance
 
-func _on_area_2d_body_entered(body):
-	print("Collided with: ", body.name)
-	
-	# Hit
-	body.hit(damage, position)
-	
-	# Destroy spell after collision
-	queue_free()
-	
+func cast(start_position: Vector2, direction: Vector2):
+	if spell_chain:
+		global_position = start_position
+		spell_chain.start(direction)
+		animation_player.play("cast")
