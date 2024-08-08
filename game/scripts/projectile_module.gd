@@ -21,6 +21,9 @@ func _init(velocity: float, shape: SpellShape, effect: SpellEffect):
 	self.shape = shape
 	self.effect = effect
 	# Set up shape, sprite, etc. based on data
+	
+func _to_string():
+	return "ProjectileModule(velocity: %d, shape: %s, effect: %s, next_mod: %s)" % [velocity, shape, effect, "None" if next_module == null else next_module]
 
 func start(new_direction: Vector2):
 	direction = new_direction

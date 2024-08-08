@@ -17,6 +17,9 @@ func _init(target, effect):
 	self.effect = effect
 	pass
 
+func _to_string():
+	return "AlterModule(target_type: %s, effect: %s, next_mod: %s)" % [enum_to_string(TargetType, target_type), effect, "None" if next_module == null else next_module]
+
 func start(_direction: Vector2):
 	var target = get_target()
 	if target:

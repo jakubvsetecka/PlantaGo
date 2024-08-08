@@ -4,8 +4,6 @@
 
 [node name="ProjectileModule" type="Area2D"]
 script = ExtResource("1_vpsob")
-velocity = null
-lifetime = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 

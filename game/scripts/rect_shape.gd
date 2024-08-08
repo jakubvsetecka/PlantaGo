@@ -12,3 +12,6 @@ func _init(outer, inner, len, rot):
 	inner_width = inner
 	length = len
 	rotation = rot
+	
+func _to_string():
+	return "RectShape(outer_width: %d, inner_width: %d, length: %d, rotation: %d)" % [outer_width, inner_width, length, rotation]

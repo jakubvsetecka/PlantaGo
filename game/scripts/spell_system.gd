@@ -12,6 +12,10 @@ func _ready():
 	print("spell system ready")
 	load_spell_config()
 	run()
+	print(self)
+	
+func _to_string() -> String:
+	return "\n".join(range(spells.size()).map(func(idx): return "%d. spell: %s" % [idx, spells[idx]]))
 
 func run():
 	pass # cast_spell()
@@ -29,7 +33,7 @@ func load_spell_config():
 				spells.append(spell_constructor.construct_spell(spell))
 	else:
 		print("Failed to open spell_config.json")
-
+		
 func create_spell(spell_name: String) -> Node2D:
 	if spell_name in spell_config:
 		

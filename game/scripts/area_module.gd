@@ -25,6 +25,9 @@ func _init(ttl, shape, position, effect):
 	self.pos = position
 	self.effect = effect
 
+func _to_string():
+	return "AreaModule(ttl: %d, shape: %s, pos: %s, effect: %s, next_mod: %s)" % [ttl, shape, pos, effect, "None" if next_module == null else next_module]
+
 func start(_direction: Vector2):
 	set_process(true)
 	timer.start()

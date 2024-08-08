@@ -12,4 +12,6 @@ func _init(outer, inner, ang, rot):
 	inner_radius = inner
 	angle = ang
 	rotation = rot
-	pass
+
+func _to_string():
+	return "DonutShape(outer_radius: %d, inner_radius: %d, angle: %d, rotation: %d)" % [outer_radius, inner_radius, angle, rotation]

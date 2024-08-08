@@ -10,10 +10,10 @@ func construct_shape(shape_dict: Dictionary):
 	var shape_object
 	match type:
 		"rect":
-			shape = DonutShape.new(shape_dict.get("outer_width"), shape_dict.get("inner_width"), shape_dict.get("length"), shape_dict.get("rotation"))
+			shape = RectShape.new(shape_dict.get("outer_width"), shape_dict.get("inner_width"), shape_dict.get("length"), shape_dict.get("rotation"))
 			pass
 		"donut":
-			shape = RectShape.new(shape_dict.get("outer_radius"), shape_dict.get("inner_radius"), shape_dict.get("angle"), shape_dict.get("rotation"))
+			shape = DonutShape.new(shape_dict.get("outer_radius"), shape_dict.get("inner_radius"), shape_dict.get("angle"), shape_dict.get("rotation"))
 			pass
 		_:
 			print("Unknown shape")
@@ -45,7 +45,7 @@ func construct_position(pos_dict: Dictionary):
 			pass
 		_:
 			print("Unknown area position")
-	pass
+	return pos
 
 func construct_projectile(module_dict: Dictionary) -> ProjectileModule:
 	var velocity = module_dict.get("velocity")
@@ -89,20 +89,13 @@ func construct_module(module_dict: Dictionary) -> SpellModule:
 	return spell_module
 
 func construct_spell(spell_dict: Dictionary) -> Spell:
-	var SpellScene = preload("res://scenes/spell.tscn")
-	var new_spell = SpellScene.instantiate()
+	var mod_chain: Array = spell_dict.get("spell_chain")
+	var previous_mod = null
+	for i in range(mod_chain.size() - 1, -1, -1):
+		var current_mod = construct_module(mod_chain[i])
+		if previous_mod:
+			current_mod.next_module = previous_mod
+		previous_mod = current_mod
 	
-	new_spell.name = spell_dict.get("name")
-	new_spell.color_scheme = spell_dict.get("color_scheme")
-	new_spell.frequency = spell_dict.get("frequency")
-	
-	var spell_chain: Array = spell_dict.get("spell_chain")
-	var previous_spell = null
-	for i in range(spell_chain.size() - 1, -1, -1):
-		var current_spell = construct_module(spell_chain[i])
-		if previous_spell:
-			current_spell.next_module = previous_spell
-		previous_spell = current_spell
-	new_spell.first_module = previous_spell
-	
+	var new_spell = Spell.new(spell_dict.get("name"), previous_mod, spell_dict.get("color_scheme"), spell_dict.get("frequency"))
 	return new_spell
