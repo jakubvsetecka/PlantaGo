@@ -1,11 +1,15 @@
 extends Node2D
 
+class_name Spell
+
 @export var spell_data: Dictionary
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var spell_chain: SpellModule
+var direction = Vector2.ZERO
+
 
 func _ready():
 	initialize_spell(spell_data)
@@ -38,11 +42,11 @@ func create_spell_module(module_data: Dictionary) -> SpellModule:
 	
 	match module_type:
 		"projectile":
-			module_scene = preload("res://scenes/ProjectileModule.tscn")
+			module_scene = preload("res://scenes/projectile_module.tscn")
 		"area":
-			module_scene = preload("res://scenes/AreaModule.tscn")
+			module_scene = preload("res://scenes/area_module.tscn")
 		"alter":
-			module_scene = preload("res://scenes/AlterModule.tscn")
+			module_scene = preload("res://scenes/alter_module.tscn")
 		_:
 			return null
 

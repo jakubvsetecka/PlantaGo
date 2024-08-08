@@ -46,29 +46,9 @@ func get_direction():
 	print("direction is: " + direction)
 	return direction
 
-func cast_spell():
-	if not casting:
-		casting = true
-		timer.start()
-		
-		var nearest_enemy = find_nearest_enemy()
-		var spell = SPELL.instantiate()
-		
-		if nearest_enemy:
-			# Calculate direction to the nearest enemy
-			var direction_to_enemy = (nearest_enemy.global_position - global_position).normalized()
-			spell.rotation = direction_to_enemy.angle()
-			spell.direction = direction_to_enemy
-		else:
-			# If no enemy found, use default direction
-			spell.rotation = player_rotation - PI/2
-			spell.direction = orientation
-		
-		spell.position = position
-		game.add_child(spell)
-
 func find_nearest_enemy():
 	var enemies = get_tree().get_nodes_in_group("enemies")
+	print("enemies: " + str(enemies))
 	var nearest = null
 	var nearest_distance = INF
 	
@@ -79,12 +59,6 @@ func find_nearest_enemy():
 			nearest_distance = distance
 	
 	return nearest
-
-func _on_timer_timeout():
-	casting = false
-	cast_spell()
-	# Remove this line if you don't want to reload the scene after casting
-	# get_tree().reload_current_scene()
 
 func animate_sprite(is_casting, is_running):
 	
@@ -123,7 +97,6 @@ func _input(event):
 
 func _physics_process(delta):
 	# Handle collisions
-	cast_spell()
 	collision_count = 0
 	var collision = move_and_collide(velocity * delta)
 	
@@ -184,7 +157,3 @@ func hit(value: int, attacker_position: Vector2):
 func _on_animated_sprite_2d_animation_finished():
 	if animated_sprite.animation == "cast":
 		casting = false # Replace with function body.
-		
-
-func _on_virtual_joystick_second_touch_pressed():
-	cast_spell()

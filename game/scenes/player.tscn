@@ -1,8 +1,9 @@
-[gd_scene load_steps=30 format=3 uid="uid://bda15ph1otsf7"]
+[gd_scene load_steps=31 format=3 uid="uid://bda15ph1otsf7"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ahcr0"]
 [ext_resource type="Texture2D" uid="uid://bht77dqa6khu2" path="res://assets/Characters/Champions/Grum.png" id="1_tjskh"]
 [ext_resource type="PackedScene" uid="uid://dx1e15xpfo0b8" path="res://scenes/heatlh_bar.tscn" id="3_nxjuy"]
+[ext_resource type="PackedScene" uid="uid://byjaeeqcc6srr" path="res://scenes/spell_system.tscn" id="4_gkxgo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kk3g3"]
 atlas = ExtResource("1_tjskh")
@@ -244,6 +245,8 @@ offset_left = -8.0
 offset_top = -13.0
 offset_right = 8.0
 offset_bottom = -9.0
+
+[node name="SpellSystem" parent="." instance=ExtResource("4_gkxgo")]
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
