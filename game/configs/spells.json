@@ -37,7 +37,7 @@
 			},
 			"effect": {
 				"type": "over_time",
-				"time": 5,
+				"duration": 5,
 				"tick_per_sec": 2,
 				"effect_type": "alter_health",
 				"value": -1
@@ -48,7 +48,7 @@
 			"target": "parent",
 			"effect": {
 				"type": "over_time",
-				"time": 5,
+				"duration": 5,
 				"tick_per_sec": 0.001,
 				"effect_type": "alter_speed",
 				"value": -1

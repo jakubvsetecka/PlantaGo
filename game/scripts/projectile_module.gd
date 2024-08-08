@@ -1,6 +1,10 @@
 extends SpellModule
+class_name ProjectileModule
 
 @export var velocity: float = 200
+@export var shape: SpellShape
+@export var effect: SpellEffect 
+
 @export var lifetime: float = 5.0
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -12,8 +16,10 @@ var time_alive: float = 0.0
 func _ready():
 	set_physics_process(false)
 
-func initialize(data: Dictionary):
-	velocity = data.get("velocity", velocity)
+func _init(velocity: float, shape: SpellShape, effect: SpellEffect):
+	self.velocity = velocity
+	self.shape = shape
+	self.effect = effect
 	# Set up shape, sprite, etc. based on data
 
 func start(new_direction: Vector2):

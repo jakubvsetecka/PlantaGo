@@ -7,9 +7,10 @@ class_name Spell
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-var spell_chain: SpellModule
+var first_module: SpellModule
 var direction = Vector2.ZERO
-
+var color_scheme
+var frequency = 0
 
 func _ready():
 	initialize_spell(spell_data)
@@ -18,7 +19,7 @@ func initialize_spell(data: Dictionary):
 	# Initialize spell properties
 	$NameLabel.text = data.get("name", "Unknown Spell")
 	sprite.modulate = Color(data.get("color_scheme", "#ffffff"))
-	spell_chain = create_spell_chain(data.get("spell_chain", []))
+	first_module = create_spell_chain(data.get("spell_chain", []))
 
 func create_spell_chain(chain_data: Array) -> SpellModule:
 	var first_module = null
@@ -55,7 +56,7 @@ func create_spell_module(module_data: Dictionary) -> SpellModule:
 	return module_instance
 
 func cast(start_position: Vector2, direction: Vector2):
-	if spell_chain:
+	if first_module:
 		global_position = start_position
-		spell_chain.start(direction)
+		first_module.start(direction)
 		animation_player.play("cast")

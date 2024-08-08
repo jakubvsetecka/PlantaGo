@@ -1,11 +1,21 @@
 # AlterModule.tscn
 extends SpellModule
+class_name AlterModule
 
-@export var target_type: String = "closest_enemy"
+enum TargetType {
+	PARENT,
+	PLAYER,
+	CLOSEST,
+	RADNOM
+}
 
-func initialize(data: Dictionary):
-	target_type = data.get("target", target_type)
-	# Set up effect based on data
+@export var target_type: TargetType
+@export var effect: SpellEffect
+
+func _init(target, effect):
+	self.target_type = target
+	self.effect = effect
+	pass
 
 func start(_direction: Vector2):
 	var target = get_target()
