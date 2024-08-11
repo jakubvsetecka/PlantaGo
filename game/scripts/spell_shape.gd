@@ -6,3 +6,9 @@ func _init():
 
 func _to_string():
 	return ""
+
+func get_image(color):
+	pass
+
+func get_collision_shape():
+	pass

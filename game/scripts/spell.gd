@@ -22,8 +22,7 @@ func _init(name, first_module, color_scheme, frequency):
 func _to_string():
 	return "Spell(name: %s, mod_chain: %s, color_scheme: %s, frequency: %d)" % [spell_name, str(first_module), color_scheme, frequency]
 
-func cast(start_position: Vector2, direction: Vector2):
+func cast(initial_pos: Vector2):
+	add_child(first_module)
 	if first_module:
-		global_position = start_position
-		first_module.start(direction)
-		animation_player.play("cast")
+		first_module.start(initial_pos)

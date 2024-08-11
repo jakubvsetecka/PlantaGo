@@ -59,7 +59,7 @@ func _physics_process(delta):
 		
 func hit(value: int, attacker_position: Vector2):
 	health -= value
-	print("ASLDnnka;AKSNCKn")
+	#print("ASLDnnka;AKSNCKn")
 	
 	# Calculate knockback direction
 	var knockback_direction = (global_position - attacker_position).normalized()

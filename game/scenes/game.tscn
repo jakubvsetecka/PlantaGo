@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bo6gax3h61wof" path="res://scenes/slime.tscn" id="3_bntjd"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="3_g3sbk"]
 [ext_resource type="PackedScene" uid="uid://b3hjtqwolwr3c" path="res://scenes/killzone.tscn" id="5_wjxhx"]
-[ext_resource type="PackedScene" uid="uid://dnavu3di87vg5" path="res://scenes/spell_effect_object.tscn" id="6_d5sah"]
 [ext_resource type="PackedScene" uid="uid://braxa4xh0p4ow" path="res://scenes/enemy_spawner.tscn" id="7_3isjb"]
+[ext_resource type="PackedScene" uid="uid://byjaeeqcc6srr" path="res://scenes/spell_system.tscn" id="8_or8uk"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jnfi0"]
 normal = Vector2(0, 1)
@@ -68,12 +68,10 @@ position = Vector2(0, -33)
 Slime = ExtResource("3_bntjd")
 spawn_radius = 200.0
 min_spawn_distance = 100.0
-max_enemies = 100
+max_enemies = 0
 spawn_interval = 0.1
 
-[node name="SpellEffectObject" parent="." instance=ExtResource("6_d5sah")]
-position = Vector2(-68, 53)
-size = Vector2(50, 100)
+[node name="SpellSystem" parent="." instance=ExtResource("8_or8uk")]
 
 [connection signal="second_touch_pressed" from="UI/Virtual Joystick" to="Player" method="_on_virtual_joystick_second_touch_pressed"]
 

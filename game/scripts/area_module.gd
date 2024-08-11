@@ -8,8 +8,8 @@ class_name AreaModule
 
 
 @onready var area: Area2D = $Area2D
-@onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
-@onready var sprite: Sprite2D = $Sprite2D
+# 3@onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
+# 3@onready var sprite: Sprite2D = $Sprite2D
 @onready var timer: Timer = $Timer
 
 var time_alive: float = 0.0
