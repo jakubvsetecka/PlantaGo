@@ -3,6 +3,7 @@ extends Node2D
 class_name SpellModule
 
 var sprite: Sprite2D
+var area2d: Area2D
 var collision_shape: CollisionShape2D
 
 # var position: Vector2
@@ -13,11 +14,21 @@ func _init(shape: SpellShape):
 	sprite = Sprite2D.new()
 	add_child(sprite)
 
+	# Create Area2D
+	area2d = Area2D.new()
+	add_child(area2d)
+
 	# Create CollisionShape2D
 	collision_shape = CollisionShape2D.new()
-	add_child(collision_shape)
+	area2d.add_child(collision_shape)
+	
+	area2d.collision_layer = 2  # Set appropriate layer
+	area2d.collision_mask = 1   # Set appropriate mask
 	
 	create_appearance(shape)
+	
+	# Connect the body_entered signal
+	area2d.connect("body_entered", Callable(self, "_on_body_entered"))
 
 func start(direction: Vector2):
 	pass
@@ -25,9 +36,8 @@ func start(direction: Vector2):
 func on_hit(target):
 	print("OnHit caught, activating next module...")
 	if next_module:
-		add_child(next_module)
-		next_module.position = position
-		next_module.start(Vector2.ZERO)
+		get_parent().add_child(next_module)
+		next_module.start(target.position)
 
 func enum_to_string(my_enum, enum_value: int) -> String:
 	var keys = my_enum.keys()

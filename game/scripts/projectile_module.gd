@@ -7,9 +7,6 @@ class_name ProjectileModule
 
 @export var lifetime: float = 5.0
 
-#@onready var sprite: Sprite2D = $Sprite2D
-#@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-
 var direction: Vector2 = Vector2.ZERO
 var time_alive: float = 0.0
 
@@ -22,17 +19,31 @@ func _init(velocity: float, shape: SpellShape, effect: SpellEffect):
 	self.velocity = velocity
 	self.shape = shape
 	self.effect = effect
-	# Set up shape, sprite, etc. based on data
-	#collision_layer = 2  # Set appropriate layer
-	#collision_mask = 1   # Set appropriate mask
-	#setup_appearance("#fffff", shape.get(""))
 	
 func _to_string():
 	return "ProjectileModule(velocity: %d, shape: %s, effect: %s, next_mod: %s)" % [velocity, shape, effect, "None" if next_module == null else next_module]
 
+func find_closest_enemy_direction() -> Vector2:
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var closest_enemy = null
+	var closest_distance = INF
+
+	for enemy in enemies:
+		var distance = global_position.distance_to(enemy.global_position)
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_enemy = enemy
+
+	if closest_enemy:
+		return (closest_enemy.global_position - global_position).normalized()
+	else:
+		return Vector2.ZERO  # Default direction if no enemies are found
+
 func start(initial_pos: Vector2):
 	global_position = initial_pos
-	direction = Vector2.RIGHT
+	direction = find_closest_enemy_direction()
+	if direction == Vector2.ZERO:
+		queue_free()
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -42,7 +53,10 @@ func _physics_process(delta):
 		queue_free()
 
 func _on_body_entered(body):
-	if body.has_method("take_damage"):
-		body.take_damage(10)  # Example damage value
-	on_hit(body)
+	print("Projectile entered body")
+	if body.has_method("hit"):
+		body.hit(10, position)  # Example damage value
+	
+	if body:
+		on_hit(body)
 	queue_free()

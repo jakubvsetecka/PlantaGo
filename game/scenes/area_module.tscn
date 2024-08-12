@@ -4,9 +4,3 @@
 
 [node name="AreaModule" type="Area2D"]
 script = ExtResource("1_hmuaf")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-
-[node name="Timer" type="Timer" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

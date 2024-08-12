@@ -2,6 +2,8 @@ class_name Slime
 extends CharacterBody2D
 
 var player: Node2D  # Changed from @onready to a regular variable
+var invulnerable_timer: Timer
+var invulnerable: bool = false
 
 # Slime atributes
 @export var speed = 1000  # Increased speed for better movement
@@ -21,6 +23,14 @@ func _ready():
 	velocity = Vector2.ZERO
 	add_to_group("enemies")
 	player = %Player
+	invulnerable_timer = Timer.new()
+	invulnerable_timer.one_shot = true
+	invulnerable_timer.wait_time = 1.0  # 1 second invulnerability
+	add_child(invulnerable_timer)  # Add the timer to the scene tree
+	invulnerable_timer.connect("timeout", Callable(self, "invulnerable_timer_out"))
+
+func invulnerable_timer_out():
+	invulnerable = false
 
 func set_player(new_player: Node2D):
 	player = new_player
@@ -58,15 +68,19 @@ func _physics_process(delta):
 		print("Player not set for this Slime")
 		
 func hit(value: int, attacker_position: Vector2):
-	health -= value
-	#print("ASLDnnka;AKSNCKn")
-	
-	# Calculate knockback direction
-	var knockback_direction = (global_position - attacker_position).normalized()
-	
-	# Apply knockback
-	knockback_velocity = knockback_direction * knockback_force
-	knockback_timer = knockback_duration
+	if not invulnerable:
+		health -= value
+		#print("ASLDnnka;AKSNCKn")
+		
+		# Calculate knockback direction
+		var knockback_direction = (global_position - attacker_position).normalized()
+		
+		# Apply knockback
+		knockback_velocity = knockback_direction * knockback_force
+		knockback_timer = knockback_duration
+		
+		invulnerable = true
+		invulnerable_timer.start(1)
 	
 func kill():
 	emit_signal("tree_exiting")
