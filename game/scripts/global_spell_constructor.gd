@@ -70,7 +70,10 @@ func construct_alter(module_dict: Dictionary) -> AlterModule:
 	
 	return alter
 
-func construct_module(module_dict: Dictionary) -> SpellModule:
+func construct_module(mod_chain: Stack) -> SpellModule:
+	var module_dict = mod_chain.pop()
+	if not module_dict:
+		return
 	var type = module_dict.get("type")
 	var spell_module: SpellModule
 	match type:
@@ -85,17 +88,14 @@ func construct_module(module_dict: Dictionary) -> SpellModule:
 			pass
 		_:
 			print("Unexpected data")
+	spell_module.mod_chain = mod_chain
 	
 	return spell_module
 
 func construct_spell(spell_dict: Dictionary) -> Spell:
-	var mod_chain: Array = spell_dict.get("spell_chain")
-	var previous_mod = null
-	for i in range(mod_chain.size() - 1, -1, -1):
-		var current_mod = construct_module(mod_chain[i])
-		if previous_mod:
-			current_mod.next_module = previous_mod
-		previous_mod = current_mod
-	
-	var new_spell = Spell.new(spell_dict.get("name"), previous_mod, spell_dict.get("color_scheme"), spell_dict.get("frequency"))
+	var mod_chain: Stack = Stack.new()
+	var mod_arr: Array = spell_dict.get("spell_chain")
+	for i in range(mod_arr.size() -1, -1, -1):
+		mod_chain.push(mod_arr[i])
+	var new_spell = Spell.new(spell_dict.get("name"), mod_chain, spell_dict.get("color_scheme"), spell_dict.get("frequency"))
 	return new_spell

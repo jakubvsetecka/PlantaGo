@@ -17,8 +17,8 @@
 			},
 			"effect": {
 				"type": "one_time",
-				"effect_type": "alter_health",
-				"value": -15
+				"effect_type": "alter_speed",
+				"value": -150
 			}
 		},
 		{
@@ -50,8 +50,8 @@
 				"type": "over_time",
 				"duration": 5,
 				"tick_per_sec": 0.001,
-				"effect_type": "alter_speed",
-				"value": -1
+				"effect_type": "alter_health",
+				"value": -1000
 			}
 		}
 		]

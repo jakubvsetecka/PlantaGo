@@ -12,6 +12,7 @@ var time_alive: float = 0.0
 
 func _ready():
 	set_physics_process(false)
+	z_index = 10
 
 func _init(velocity: float, shape: SpellShape, effect: SpellEffect):
 	super(shape)
@@ -54,9 +55,8 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	print("Projectile entered body")
-	if body.has_method("hit"):
-		body.hit(10, position)  # Example damage value
-	
-	if body:
-		on_hit(body)
+	if body.has_method("apply_effect"):
+		print("Projectile: Applying Effect")
+		effect.apply_to(body)
+		emit_signal("trigger_next_module", mod_chain, body)
 	queue_free()

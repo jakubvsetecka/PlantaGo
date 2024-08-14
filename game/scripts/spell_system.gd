@@ -1,7 +1,6 @@
 extends Node
 
 @export var spell_config_path: String = "res://configs/spells.json"
-@onready var spell_constructor = $SpellConstructor
 
 var spell_config: Dictionary
 var spell_scene: PackedScene = preload("res://scenes/Spell.tscn")
@@ -49,8 +48,9 @@ func create_spell(spell_name: String) -> Node2D:
 		return null
 
 func cast_spell():
-	var spell = spell_constructor.construct_spell(spells[current_spell])
+	var spell: Spell = GlobalSpellConstructor.construct_spell(spells[current_spell])
 	if spell:
+		print("Spell constructed")
 		add_child(spell)
 		spell.cast(player.position)
 

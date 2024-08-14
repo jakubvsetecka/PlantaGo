@@ -25,7 +25,7 @@ func _ready():
 	player = %Player
 	invulnerable_timer = Timer.new()
 	invulnerable_timer.one_shot = true
-	invulnerable_timer.wait_time = 1.0  # 1 second invulnerability
+	invulnerable_timer.wait_time = 0.1  # 1 second invulnerability
 	add_child(invulnerable_timer)  # Add the timer to the scene tree
 	invulnerable_timer.connect("timeout", Callable(self, "invulnerable_timer_out"))
 
@@ -76,11 +76,15 @@ func hit(value: int, attacker_position: Vector2):
 		var knockback_direction = (global_position - attacker_position).normalized()
 		
 		# Apply knockback
-		knockback_velocity = knockback_direction * knockback_force
+		knockback_velocity = knockback_direction * knockback_force * 0
 		knockback_timer = knockback_duration
 		
 		invulnerable = true
 		invulnerable_timer.start(1)
+		
+		return true
+	else:
+		return false
 	
 func kill():
 	emit_signal("tree_exiting")
@@ -91,4 +95,8 @@ func get_health():
 	
 func get_max_health():
 	return max_health
+	
+func apply_effect(effect: SpellEffect):
+	print("Slime: Effect applied: " + str(effect))
+	pass
 	

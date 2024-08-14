@@ -28,16 +28,16 @@ position_smoothing_enabled = true
 position = Vector2(-73, -18)
 
 [node name="Slime6" parent="Slimes" instance=ExtResource("3_bntjd")]
-position = Vector2(-55, -25)
+position = Vector2(74, 56)
 
 [node name="Slime7" parent="Slimes" instance=ExtResource("3_bntjd")]
-position = Vector2(-36, -34)
+position = Vector2(-63, 66)
 
 [node name="Slime10" parent="Slimes" instance=ExtResource("3_bntjd")]
-position = Vector2(-52, -44)
+position = Vector2(84, -46)
 
 [node name="Slime11" parent="Slimes" instance=ExtResource("3_bntjd")]
-position = Vector2(-70, -34)
+position = Vector2(-25, -57)
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 128

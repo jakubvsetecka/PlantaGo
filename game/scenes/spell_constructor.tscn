@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck3i2h4kk6va3"]
+
+[ext_resource type="Script" path="res://scripts/global_spell_constructor.gd" id="1_k4ab5"]
+
+[node name="SpellConstructor" type="Node"]
+script = ExtResource("1_k4ab5")

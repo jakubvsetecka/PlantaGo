@@ -2,6 +2,10 @@ extends Node2D
 
 class_name SpellModule
 
+signal trigger_next_module(mod_chain, target)
+
+var mod_chain: Stack
+
 var sprite: Sprite2D
 var area2d: Area2D
 var collision_shape: CollisionShape2D
@@ -33,12 +37,6 @@ func _init(shape: SpellShape):
 func start(direction: Vector2):
 	pass
 
-func on_hit(target):
-	print("OnHit caught, activating next module...")
-	if next_module:
-		get_parent().add_child(next_module)
-		next_module.start(target.position)
-
 func enum_to_string(my_enum, enum_value: int) -> String:
 	var keys = my_enum.keys()
 	if enum_value >= 0 and enum_value < keys.size():
@@ -59,6 +57,3 @@ func create_appearance(spell_shape: SpellShape, color: Color = Color.WHITE):
 	
 	collision_shape.shape = shape
 	collision_shape.rotation = spell_shape.rotation
-	
-	print("Appearance created for shape: " + str(spell_shape))
-

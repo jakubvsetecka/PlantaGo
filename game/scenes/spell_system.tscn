@@ -1,13 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://byjaeeqcc6srr"]
+[gd_scene load_steps=2 format=3 uid="uid://byjaeeqcc6srr"]
 
 [ext_resource type="Script" path="res://scripts/spell_system.gd" id="1_uafak"]
-[ext_resource type="Script" path="res://scripts/spell_constructor.gd" id="2_qhn7c"]
 
 [node name="SpellSystem" type="Node"]
 script = ExtResource("1_uafak")
-
-[node name="SpellConstructor" type="Node" parent="."]
-script = ExtResource("2_qhn7c")
 
 [node name="SpellTimer" type="Timer" parent="."]
 

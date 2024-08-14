@@ -7,6 +7,9 @@ enum EffectType {
 	ALTER_POSITION,
 }
 
+var type: EffectType
+var value: float = 0.0
+
 func _init():
 	pass
 
@@ -19,3 +22,6 @@ func enum_to_string(my_enum, enum_value: int) -> String:
 		
 func _to_string():
 	return ""
+	
+func apply_to(target: Node2D):
+	pass
